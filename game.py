@@ -1,8 +1,10 @@
 #!/usr/bin/python3.5
 import pygame
 from random import randint
+import time
 
 pygame.init()
+DELAY = 30 # время ожилания перед обновлением в цикле
 
 screen_width = 900
 screen_height = 500
@@ -11,7 +13,7 @@ win = False
 pygame.display.set_caption("paintball") # название окна
 
 widht = 70; height = 15 # размер доски
-speed = 15 # скорость передвижения доски
+speed = 20 # скорость передвижения доски
 x = screen_width/2; y = screen_height-height-15 # стартовая позиция доски
 
 ball = {'xrevers':False, 'yrevers':True, 'x':int(x+widht/2), 'y':int(y), 'speed':5}
@@ -20,7 +22,7 @@ barrier=[] # массив барьеров
 
 # генерируем препятствия
 def get_barriers():
-    y = 5
+    y = 5 # отступ по Y от первого блока
     ROWS = 6 # число строк с барьерами
     for row in range(ROWS):
         i = 1; x = 5;
@@ -35,7 +37,7 @@ barrier = get_barriers() # наполняем массив с препятств
 
 run = True
 while run:
-    pygame.time.delay(50) # скорость обнолвения игры
+    pygame.time.delay(DELAY) # скорость обнолвения игры
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
@@ -82,7 +84,8 @@ while run:
     #screen.blit(textsurface,(0,0))
 
     # рисуем доску
-    pygame.draw.rect(screen, (0,0,255), (x, y, widht, height))
+    #pygame.draw.rect(screen, (0,0,255), (x, y, widht, height))
+    pygame.draw.ellipse(screen, (0,0,255), (x, y, widht, height))
 
     if ball['y'] >= screen_height - 10: # шарик падает сниз, игра начинается сначала
         game = 2
@@ -91,7 +94,7 @@ while run:
         y = screen_height-height-15
         ball = {'xrevers':False, 'yrevers':True, 'x':int(x+widht/2), 'y':int(y), 'speed':5}
 
-    if ball['y']+3 >= y and (ball['x']+3 >= x and ball['x']+3 <= x+widht): ball['yrevers'] = True # отскок от доски
+    if ball['y'] + 5 >= y and (ball['x'] + 5 >= x and ball['x'] + 5 <= x+widht): ball['yrevers'] = True # отскок от доски
     if ball['x'] >= screen_width - 10 and not ball['xrevers']: ball['xrevers'] = True # отскок от правой графице, по X
     if ball['y'] <= 10 and ball['yrevers']: ball['yrevers'] = False # отскок от верхний графице по Y
     if ball['x'] <= 10 and ball['xrevers']: ball['xrevers'] = False # отскок от левой графице, по X
@@ -122,12 +125,10 @@ while run:
                 ball['yrevers'] = False
                 barrier[i]['status'] = False
 
-            elif ball['y']+3 <= barrier[i]['y']+25 and ( ball['x']+3 >= barrier[i]['x'] and ball['x']+3 <= barrier[i]['x']+107 ):
-                ball['yrevers'] = True
+            elif ( ball['y']+3 <= barrier[i]['y'] and ball['y']+3 >= barrier[i]['y']+25 ) and ( ball['x']+3 >= barrier[i]['x'] and ball['x']+3 <= barrier[i]['x']+107 ):
+                ball['yrevers'] = True # отскакиваем по Y
                 barrier[i]['status'] = False
-            elif (ball['y']+3 >= barrier[i]['y'] and ball['y']+3 <= barrier[i]['y']+25) and ( ball['x']+3 >= barrier[i]['x'] and ball['x']+3 <= barrier[i]['x']+107 ):
-                ball['yrevers'] = True
-                barrier[i]['status'] = False
+
 
             h = h + 110
             i += 1
