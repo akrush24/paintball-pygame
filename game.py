@@ -4,7 +4,7 @@ from random import randint
 import time
 
 pygame.init()
-DELAY = 30 # время ожилания перед обновлением в цикле
+DELAY = 20 # время ожилания перед обновлением в цикле
 
 screen_width = 900
 screen_height = 500
@@ -37,6 +37,7 @@ barrier = get_barriers() # наполняем массив с препятств
 
 run = True
 while run:
+
     pygame.time.delay(DELAY) # скорость обнолвения игры
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -65,10 +66,10 @@ while run:
     #if keys[pygame.K_DOWN] and y < screen_height - height - 15:
     #    y += speed
 
-    if keys[pygame.K_PLUS] or keys[pygame.K_KP_PLUS]:
-        speed = speed + 1
-    if keys[pygame.K_MINUS] and speed > 5:
-        speed = speed - 1
+    #if keys[pygame.K_PLUS] or keys[pygame.K_KP_PLUS]:
+    #    speed = speed + 1
+    #if keys[pygame.K_MINUS] and speed > 5:
+    #    speed = speed - 1
 
     if game == 1 or game == 0:
         screen.fill((0,0,0))# зарисовываем все черным цветом
